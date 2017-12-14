@@ -13,4 +13,13 @@ public class Utility {
 				user.getPassword(),
 				user.getPhone());		
 	}
+	
+	public static User userEntityToUser(UserEntity userEntity) {
+		return new User(
+				userEntity.getId(),
+				userEntity.getName(),
+				userEntity.getEmail(),
+				userEntity.getPassword(),
+				userEntity.getPhone());		
+	}
 }
