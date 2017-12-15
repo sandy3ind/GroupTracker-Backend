@@ -24,6 +24,7 @@ import com.samyuktatech.mysql.entity.UserEntity;
 import com.samyuktatech.mysql.repository.GroupEntityRepository;
 import com.samyuktatech.mysql.repository.GroupUserEntityRepository;
 import com.samyuktatech.mysql.repository.UserEntityRepository;
+import com.samyuktatech.util.Constants.GroupUserStatus;
 import com.samyuktatech.util.Utility;
 
 @RestController
@@ -73,8 +74,7 @@ public class GroupService {
 			// Save group invitation to each user			
 			for (Long id : group.getUserIds()) {
 				GroupUserEntity groupUser = new GroupUserEntity(groupEntity.getId(), id);
-				groupUser.setInvitationSent(true);
-				groupUser.setInvitationSentDate(new Date());
+				groupUser.setStatus(GroupUserStatus.INVITATION_SENT);
 				groupUserEntityRepository.save(groupUser);
 			}
 						
@@ -90,27 +90,41 @@ public class GroupService {
 	 * @param userId
 	 * @return
 	 */
+	@PostMapping("/accept-reject-invitation/groupId/{groupId}/userId/{userId}/isAccepted/{isAccepted}")
 	public ResponseEntity<?> accept_rejectInvitation(
 			@PathVariable("groupId") Long groupId,
 			@PathVariable("userId") Long userId,
 			@PathVariable("isAccepted") boolean isAccepted) {
 		
 		// Check if invitation was sent to this user
-		GroupUserEntity groupUser = groupUserEntityRepository.findByGroupIdAndUserIdAndIsInvitationSent(
-				groupId, userId, true);
+		GroupUserEntity groupUser = groupUserEntityRepository.findByGroupIdAndUserIdAndStatus(groupId, userId, GroupUserStatus.INVITATION_SENT);
 		if (groupUser == null) {
 			ResponseEntity.badRequest().body("Invitation was not sent to this user");
 		}
 		
 		// Check if Invitation was already accepted by this user
-		Long count = groupUserEntityRepository.countByGroupIdAndUserIdAndIsInvitationAccepted(
-				groupId, userId, true);
+		Long count = groupUserEntityRepository.countByGroupIdAndUserIdAndStatus(groupId, userId, GroupUserStatus.INVITATION_ACCEPTED);
 		if (count > 0) {
-			ResponseEntity.badRequest().body("Invitation was already accepted by this user");
+			return ResponseEntity.badRequest().body("Invitation was already Accepted by this user");
 		}
+		
+		// Check if Invitation was already rejected by this user
+		count = groupUserEntityRepository.countByGroupIdAndUserIdAndStatus(
+				groupId, userId, GroupUserStatus.INVITATION_REJECTED);
+		if (count > 0) {
+			return ResponseEntity.badRequest().body("Invitation was already Rejected by this user");
+		}
+		
 		// Set accepted/reject and save into database
+		if (isAccepted) {
+			groupUser.setStatus(GroupUserStatus.INVITATION_ACCEPTED);
+		}
+		else {
+			groupUser.setStatus(GroupUserStatus.INVITATION_REJECTED);
+		}
 		
+		groupUserEntityRepository.save(groupUser);
 		
-		return  ResponseEntity.ok("Group saved successfully");
+		return  ResponseEntity.ok("Success");
 	}
 }

@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.samyuktatech.util.Constants.GroupUserStatus;
+
 @Entity
 @Table(name = "group_users")
 public class GroupUserEntity {
@@ -26,20 +28,30 @@ public class GroupUserEntity {
 	@Column(name = "user_id")
 	private Long userId;
 	
-	@Column(name = "is_invitation_sent")
-	private boolean isInvitationSent;
+	
+	@Column(name = "status")
+	private GroupUserStatus status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "invitation_sent_date")
-	private Date invitationSentDate;
+	@Column(name = "modified_date")
+	private Date modifiedDate;	
 	
-	@Column(name = "is_invitation_accepted")
-	private boolean isInvitationAccepted;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "invitation_accepted_date")
-	private Date invitationAccepted;
-	
+	public GroupUserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(GroupUserStatus status) {
+		this.status = status;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
 	public GroupUserEntity() {}
 	
 	public GroupUserEntity(Long groupId, Long userId) {
@@ -70,37 +82,5 @@ public class GroupUserEntity {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public boolean isInvitationSent() {
-		return isInvitationSent;
-	}
-
-	public void setInvitationSent(boolean isInvitationSent) {
-		this.isInvitationSent = isInvitationSent;
-	}
-
-	public Date getInvitationSentDate() {
-		return invitationSentDate;
-	}
-
-	public void setInvitationSentDate(Date invitationSentDate) {
-		this.invitationSentDate = invitationSentDate;
-	}
-
-	public boolean isInvitationAccepted() {
-		return isInvitationAccepted;
-	}
-
-	public void setInvitationAccepted(boolean isInvitationAccepted) {
-		this.isInvitationAccepted = isInvitationAccepted;
-	}
-
-	public Date getInvitationAccepted() {
-		return invitationAccepted;
-	}
-
-	public void setInvitationAccepted(Date invitationAccepted) {
-		this.invitationAccepted = invitationAccepted;
 	}
 }

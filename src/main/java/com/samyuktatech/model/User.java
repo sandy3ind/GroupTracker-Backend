@@ -16,7 +16,9 @@ public class User {
 	
 	private String phone;
 	private String password;
-	private List<Role> roles;	
+	private List<Role> roles;
+	
+	public User() {}
 	
 	public User(Long id, String name, String email, String phone, String password) {
 		super();

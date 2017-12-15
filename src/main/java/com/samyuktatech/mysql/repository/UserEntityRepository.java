@@ -8,4 +8,6 @@ public interface UserEntityRepository extends CrudRepository<UserEntity, Long> {
 
 	Long countByEmail(String email);
 
+	UserEntity findByEmail(String email);
+
 }
