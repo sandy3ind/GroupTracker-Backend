@@ -7,4 +7,6 @@ import com.samyuktatech.mysql.entity.GroupEntity;
 
 public interface FCMTokenEntityRepository extends CrudRepository<FCMTokenEntity, Long> {
 
+	FCMTokenEntity findByUserId(Long userId);
+
 }

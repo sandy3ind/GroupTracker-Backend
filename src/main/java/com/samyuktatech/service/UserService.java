@@ -1,5 +1,6 @@
 package com.samyuktatech.service;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.samyuktatech.model.User;
+import com.samyuktatech.mysql.entity.FCMTokenEntity;
+import com.samyuktatech.mysql.repository.FCMTokenEntityRepository;
 import com.samyuktatech.mysql.repository.UserEntityRepository;
 import com.samyuktatech.util.Utility;
 
@@ -24,6 +27,9 @@ public class UserService {
 	
 	@Autowired
 	private UserEntityRepository userEntityRepository;
+	
+	@Autowired
+	private FCMTokenEntityRepository fcmTokenEntityRepository;
 
 	/**
 	 * Save User into Mysql
@@ -61,10 +67,30 @@ public class UserService {
 		}		
 	}
 	
-	@PostMapping()
+	/**
+	 * Save/Update device FCM token
+	 * 
+	 * @param userId
+	 * @param deviceToken
+	 * @return
+	 */
+	@PostMapping("/fcm-device-token/userId/{userId}/deviceToken/{deviceToken}")
 	public ResponseEntity<?> fcmDevice(
 			@PathVariable("userId") Long userId, 
-			@PathVariable("deviceToken") Long deviceToken) {
+			@PathVariable("deviceToken") String deviceToken) {
+		
+		FCMTokenEntity fcmToken = fcmTokenEntityRepository.findByUserId(userId);
+		
+		if (fcmToken != null) {
+			fcmToken.setDeviceToken(deviceToken);
+			fcmToken.setModifiedDate(new Date());			
+		}
+		else {
+			fcmToken = new FCMTokenEntity(userId, deviceToken);
+			fcmToken.setInsertedDate(new Date());
+		}
+		
+		fcmTokenEntityRepository.save(fcmToken);
 		
 		return  ResponseEntity.ok("FCM token saved successfully");
 		
