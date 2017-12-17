@@ -17,15 +17,20 @@ public class User {
 	private String phone;
 	private String password;
 	private List<Role> roles;
+	private String accessToken;
 	
 	public User() {}
 	
-	public User(Long id, String name, String email, String phone, String password) {
+	public User(Long id, String name, String email, String phone) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
+	}
+	
+	public User(Long id, String name, String email, String phone, String password) {
+		this (id, name, email, phone);
 		this.password = password;
 	}
 	
@@ -64,6 +69,14 @@ public class User {
 	}
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	
 	

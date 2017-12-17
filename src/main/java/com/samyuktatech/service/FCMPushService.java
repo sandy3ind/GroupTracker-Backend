@@ -34,7 +34,7 @@ public class FCMPushService {
 		
 		if (fcmToken != null && !fcmToken.getDeviceToken().isEmpty()) {
 			List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-			interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + FIREBASE_SERVER_KEY));
+			interceptors.add(new HeaderRequestInterceptor("Authorization", "key=" + fcmServerKey));
 			interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
 			restTemplate.setInterceptors(interceptors);
 		}

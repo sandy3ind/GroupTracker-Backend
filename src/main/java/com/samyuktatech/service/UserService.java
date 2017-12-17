@@ -9,6 +9,7 @@ import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,9 @@ public class UserService {
 	
 	@Autowired
 	private FCMTokenEntityRepository fcmTokenEntityRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/**
 	 * Save User into Mysql
@@ -68,6 +72,9 @@ public class UserService {
 			if (count > 0) {
 				return ResponseEntity.badRequest().body("User already exists");
 			}
+			
+			// Encode password
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			
 			// Save user 
 			userEntityRepository.save(Utility.userToUserEntity(user));
