@@ -32,6 +32,7 @@ import com.samyuktatech.mysql.repository.FCMTokenEntityRepository;
 import com.samyuktatech.mysql.repository.UserEntityRepository;
 import com.samyuktatech.util.Utility;
 
+
 @RestController
 @RequestMapping("/user")
 public class UserService {
@@ -44,6 +45,10 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+
+	@Autowired
+	private FCMPushService fcmPushService;
 
 	/**
 	 * Save User into Mysql
@@ -88,6 +93,8 @@ public class UserService {
 	@GetMapping("email/{email}")
 	public ResponseEntity<?> getUserByEmail(
 			@RequestParam("email") String email) {
+		
+		fcmPushService.pushToUser(1l);
 		
 		UserEntity userEntity = userEntityRepository.findByEmail(email);
 		
