@@ -9,6 +9,8 @@ public interface GroupUserEntityRepository extends CrudRepository<GroupUserEntit
 
 	GroupUserEntity findByGroupIdAndUserIdAndStatus(Long groupId, Long userId, GroupUserStatus status);
 	
+	GroupUserEntity findByGroupIdAndUserId(Long groupId, Long userId);
+	
 	Long countByGroupIdAndUserIdAndStatus(Long groupId, Long userId, GroupUserStatus status);
 
 }
