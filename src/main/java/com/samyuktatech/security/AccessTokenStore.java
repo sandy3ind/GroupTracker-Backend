@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
+
 import com.samyuktatech.util.Utility;
 
 public class AccessTokenStore {
@@ -14,7 +16,7 @@ public class AccessTokenStore {
 		tokenMap = new HashMap<>();
 	}
 	
-	public String storeToken(String username) {
+	public String storeToken(String username, Authentication authentication) {
 		Utility.consoleLog("Storing token for usename : " + username);
 		
 		String token = Utility.getUniqueToken();
@@ -23,6 +25,7 @@ public class AccessTokenStore {
 		accessToken.setUsername(username);
 		accessToken.setCreatedTime(new Date());
 		accessToken.setValid(true);
+		accessToken.setAuthentication(authentication);
 		
 		// Invalidate other token of this user
 		tokenMap.entrySet()
@@ -34,16 +37,14 @@ public class AccessTokenStore {
 		
 	}
 	
-	public boolean isValidAccessToken(String accessToken) {
-		Utility.consoleLog("Validating Token : " + accessToken);
+	public Authentication getAuthentication(String accessToken) {
 		
 		AccessToken token = tokenMap.get(accessToken);
 		
 		if (token != null) {
-			return true;
+			return token.getAuthentication();
 		}
-		else {
-			return false;
-		}
+		
+		return null;
 	}
 }

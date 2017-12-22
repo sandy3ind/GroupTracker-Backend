@@ -126,7 +126,7 @@ public class UserService {
 		
 		fcmTokenEntityRepository.save(fcmToken);
 		
-		return  ResponseEntity.ok("FCM token saved successfully");
+		return  ResponseEntity.ok().build();
 		
 	}
 	

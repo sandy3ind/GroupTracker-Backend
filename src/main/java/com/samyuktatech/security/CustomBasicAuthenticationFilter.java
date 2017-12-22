@@ -48,23 +48,26 @@ public class CustomBasicAuthenticationFilter extends GenericFilterBean {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
-		String header = request.getHeader("Access-Token");
+		String accessToken = request.getHeader("Access-Token");
 		
 		try {
-			// Check if user is Authenticated
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();			
-			if (authentication == null) {
-				throw new UsernameNotFoundException("Authentcation not found");
-			}
+			
+			Utility.consoleLog("Access Token : " + accessToken);
 			
 			// Check if use has valid Access Token
-			if (header == null || !accessTokenStore.isValidAccessToken(header)) {
-				throw new AuthenticationCredentialsNotFoundException("InValid Access Token");
+			if (accessToken == null) {
+				throw new AuthenticationCredentialsNotFoundException("Access Token not found");
 			}
+			
+			// Check if user is Authenticated
+			Authentication authentication = accessTokenStore.getAuthentication(accessToken);			
+			if (authentication == null) {
+				throw new UsernameNotFoundException("Authentcation not found");
+			}			
 			
 		}
 		catch (AuthenticationException ex) {
-			Utility.consoleLog("Auth failed");
+			Utility.consoleLog("Auth failed : " + ex.getMessage());
 			authFailureHandler.onAuthenticationFailure(request, response, ex);
 			return;
 		}		

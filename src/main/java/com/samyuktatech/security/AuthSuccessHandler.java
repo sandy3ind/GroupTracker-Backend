@@ -26,10 +26,12 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 		
 		SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
 		
+		Utility.consoleLog("Auth : "+authentication);
+		
 		// Store Access Token
 		User user = new User(securityUser.getId(), securityUser.getName(), securityUser.getEmail(), securityUser.getPhone());
 		
-		user.setAccessToken(accessTokenStore.storeToken(user.getEmail()));
+		user.setAccessToken(accessTokenStore.storeToken(user.getEmail(), authentication));
 		
 		// Flush to client
         ObjectMapper mapper = new ObjectMapper();

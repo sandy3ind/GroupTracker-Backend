@@ -2,6 +2,8 @@ package com.samyuktatech.security;
 
 import java.util.Date;
 
+import org.springframework.security.core.Authentication;
+
 import com.samyuktatech.util.Constants.LoginType;
 
 public class AccessToken {
@@ -10,6 +12,7 @@ public class AccessToken {
 	private String token;
 	private boolean isValid;
 	private Date createdTime;
+	private Authentication authentication;
 	
 	public String getUsername() {
 		return username;
@@ -58,6 +61,12 @@ public class AccessToken {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+	public Authentication getAuthentication() {
+		return authentication;
+	}
+	public void setAuthentication(Authentication authentication) {
+		this.authentication = authentication;
 	}
 	
 	
