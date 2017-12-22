@@ -127,4 +127,23 @@ public class GroupService {
 		
 		return  ResponseEntity.ok("Success");
 	}
+	
+	/**
+	 * Get group invitation status based on userid and groupid
+	 * It can be used at device to decide whether group user has accepted invitation or not
+	 * and start sending location from device
+	 * 
+	 * @param groupId
+	 * @param userId
+	 * @return
+	 */
+	@PostMapping("inviation-status/userId/{userId}/groupId/{groupId}")
+	public ResponseEntity<?> getGroupByName(
+			@PathVariable("groupId") Long groupId,
+			@PathVariable("userId") Long userId) {
+		
+		GroupUserEntity groupUser = groupUserEntityRepository.findByGroupIdAndUserId(groupId, userId);
+		
+		return  ResponseEntity.ok(groupUser);		
+	}
 }
